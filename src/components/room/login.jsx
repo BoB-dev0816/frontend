@@ -1,10 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { authService } from '../../services/authService';
+// import QRCode from 'qrcode.react'; // npm install qrcode.react 후 주석 해제
 
 export default function Login({ onLoginSuccess }) {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [qrToken, setQrToken] = useState('');
+
+  // QR 토큰 생성 및 폴링
+  useEffect(() => {
+    const generateQRToken = () => {
+      const token = Math.random().toString(36).substring(2, 15);
+      setQrToken(token);
+      
+      // QR 로그인 폴링 (실제 서버 구현 후 사용)
+      // const checkQRLogin = setInterval(async () => {
+      //   try {
+      //     const response = await fetch(`/api/qr-login/${token}`);
+      //     if (response.ok) {
+      //       const data = await response.json();
+      //       if (data.success) {
+      //         clearInterval(checkQRLogin);
+      //         onLoginSuccess(data.user);
+      //       }
+      //     }
+      //   } catch (error) {
+      //     console.error('QR 로그인 확인 오류:', error);
+      //   }
+      // }, 2000);
+      
+      // return () => clearInterval(checkQRLogin);
+    };
+
+    generateQRToken();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -108,6 +138,55 @@ export default function Login({ onLoginSuccess }) {
           닉네임을 입력하면 자동으로 계정이 생성됩니다
         </div>
       </form>
+
+      {/* QR 코드 섹션 */}
+      <div style={{
+        marginTop: '20px',
+        textAlign: 'center',
+        padding: '15px',
+        backgroundColor: 'rgba(240, 240, 240, 0.9)',
+        borderRadius: '8px',
+        border: '1px dashed #ccc'
+      }}>
+        <div style={{
+          fontSize: '12px',
+          color: '#333',
+          marginBottom: '10px',
+          fontWeight: 'bold'
+        }}>
+          📱 QR 코드로 빠른 로그인
+        </div>
+        
+        <div style={{
+          width: '100px',
+          height: '100px',
+          backgroundColor: 'white',
+          border: '1px solid #ddd',
+          margin: '0 auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '10px',
+          color: '#666'
+        }}>
+          {/* QR 코드 자리 - npm install qrcode.react 후 사용 */}
+          {/* <QRCode 
+            value={`${window.location.origin}/qr-login/${qrToken}`}
+            size={90}
+          /> */}
+          QR 코드
+          <br />
+          (구현 예정)
+        </div>
+        
+        <div style={{
+          fontSize: '9px',
+          color: '#666',
+          marginTop: '8px'
+        }}>
+          모바일로 QR 스캔하여 자동 로그인
+        </div>
+      </div>
     </div>
   );
 }
