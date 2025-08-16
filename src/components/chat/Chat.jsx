@@ -1,19 +1,44 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ChatInput from './ChatInput';
+import useWebSocket from '../../hooks/useWebSocket';
 
 export default function Chat() {
-  const [messages, setMessages] = useState([]);
-  const [userId, setUserId] = useState('user0');
+  const [roomId, setRoomId] = useState(null);
+  const [token, setToken] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
+  
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    const storedEmail = localStorage.getItem('userEmail');
+    setToken(storedToken);
+    setUserEmail(storedEmail);
+    
+    // 내 채팅방 목록에서 첫 번째 방 ID 가져오기
+    if (storedToken) {
+      fetch('http://localhost:8080/chat/my/rooms', {
+        headers: {
+          'Authorization': `Bearer ${storedToken}`
+        }
+      })
+      .then(response => response.json())
+      .then(rooms => {
+        console.log('내 채팅방 목록:', rooms);
+        if (rooms.length > 0) {
+          setRoomId(rooms[0].roomId);
+          console.log('채팅방 ID 설정:', rooms[0].roomId);
+        }
+      })
+      .catch(error => {
+        console.log('채팅방 목록 조회 오류:', error);
+      });
+    }
+  }, []);
 
+  const { messages, connected, sendMessage, setMessages } = useWebSocket(roomId, token);
+  
   const handleSendMessage = (message) => {
-    const newMessage = {
-      id: Date.now(),
-      userId: userId,
-      text: message,
-      timestamp: new Date().toLocaleTimeString()
-    };
-    setMessages(prev => [...prev, newMessage]);
+    sendMessage(message, userEmail);
   };
 
   return (
@@ -38,9 +63,19 @@ export default function Chat() {
         marginBottom: '8px',
         color: '#333',
         borderBottom: '1px solid rgba(0, 0, 0, 0.2)',
-        paddingBottom: '4px'
+        paddingBottom: '4px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
       }}>
-        채팅
+        <span>채팅</span>
+        <span style={{
+          fontSize: '10px',
+          color: connected ? '#28a745' : '#dc3545',
+          fontWeight: 'normal'
+        }}>
+          {connected ? '연결됨' : '연결안됨'}
+        </span>
       </div>
       
       <div style={{
@@ -49,13 +84,17 @@ export default function Chat() {
         marginBottom: '8px',
         padding: '4px'
       }}>
-        {messages.length === 0 ? (
+        {!roomId ? (
+          <div style={{ color: '#666', fontSize: '12px' }}>
+            채팅방 연결 중...
+          </div>
+        ) : messages.length === 0 ? (
           <div style={{ color: '#666', fontSize: '12px' }}>
             채팅을 시작해보세요!
           </div>
         ) : (
-          messages.map(msg => (
-            <div key={msg.id} style={{
+          messages.map((msg, index) => (
+            <div key={index} style={{
               marginBottom: '6px',
               padding: '6px',
               backgroundColor: 'rgba(240, 240, 240, 0.7)',
@@ -68,21 +107,21 @@ export default function Chat() {
                 marginBottom: '2px'
               }}>
                 <span style={{ fontWeight: 'bold', color: '#007bff' }}>
-                  {msg.userId}
+                  {msg.senderEmail ? msg.senderEmail.split('@')[0] : 'Unknown'}
                 </span>
                 <span style={{ fontSize: '10px', color: '#666' }}>
-                  {msg.timestamp}
+                  {new Date().toLocaleTimeString()}
                 </span>
               </div>
               <div style={{ color: '#333' }}>
-                {msg.text}
+                {msg.message}
               </div>
             </div>
           ))
         )}
       </div>
       
-      <ChatInput onSendMessage={handleSendMessage} />
+      <ChatInput onSendMessage={handleSendMessage} disabled={!roomId || !connected} />
     </div>
   );
 }

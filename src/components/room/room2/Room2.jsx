@@ -1,26 +1,37 @@
-import React, { useEffect } from "react";
-import room1 from "./room1.png";
+import React, { useState, useEffect } from "react";
+import room1 from "./room2.png";
 import Chat from "../../chat/Chat";
 import Map from "../../map/Map";
 import Login from "../login";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useRoom } from "../../../contexts/RoomContext";
+import { authService } from "../../../services/authService";
 
-export default function Room1() {
-  const { isLoggedIn, login, logout } = useAuth();
-  const { setCurrentRoom } = useRoom();
+export default function Room2() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    setCurrentRoom(1);
-  }, [setCurrentRoom]);
+    const loginStatus = authService.isLoggedIn();
+    const token = authService.getToken();
+    const userEmail = authService.getUserEmail();
+    
+    console.log('로그인 상태 확인:', {
+      isLoggedIn: loginStatus,
+      hasToken: !!token,
+      userEmail: userEmail
+    });
+    
+    setIsLoggedIn(loginStatus);
+  }, []);
 
-  const handleLoginSuccess = (userInfo) => {
+  const handleLoginSuccess = () => {
     console.log('로그인 성공 콜백 호출');
-    login(userInfo);
+    const loginStatus = authService.isLoggedIn();
+    console.log('로그인 성공 후 상태:', loginStatus);
+    setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
-    logout();
+    authService.logout();
+    setIsLoggedIn(false);
   };
 
   return (

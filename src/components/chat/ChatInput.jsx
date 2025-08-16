@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-const ChatInput = ({ onSendMessage }) => {
+const ChatInput = ({ onSendMessage, disabled = false }) => {
   const [message, setMessage] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (message.trim()) {
+    if (message.trim() && !disabled) {
       onSendMessage(message);
       setMessage('');
     }
@@ -21,29 +21,32 @@ const ChatInput = ({ onSendMessage }) => {
         type="text"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="메시지를 입력하세요..."
+        placeholder={disabled ? "연결 중..." : "메시지를 입력하세요..."}
+        disabled={disabled}
         style={{
           flex: 1,
           padding: '6px 8px',
           fontSize: '12px',
           border: '1px solid #ccc',
           borderRadius: '4px',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          outline: 'none'
+          backgroundColor: disabled ? 'rgba(240, 240, 240, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+          outline: 'none',
+          opacity: disabled ? 0.6 : 1
         }}
       />
       <button
         type="submit"
+        disabled={disabled}
         style={{
           marginLeft: '4px',
           padding: '6px 12px',
           fontSize: '12px',
-          backgroundColor: '#007bff',
+          backgroundColor: disabled ? '#ccc' : '#007bff',
           color: 'white',
           border: 'none',
           borderRadius: '4px',
-          cursor: 'pointer',
-          opacity: 0.9
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          opacity: disabled ? 0.6 : 0.9
         }}
       >
         전송
