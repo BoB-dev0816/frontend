@@ -1,42 +1,47 @@
-import React, { useState, useEffect } from "react";
-import room1 from "./room2.png";
+import React, { useEffect } from "react";
+import room2 from "./room2.png";
 import Chat from "../../chat/Chat";
 import Map from "../../map/Map";
 import Login from "../login";
-import { authService } from "../../../services/authService";
+import ImageButton from "../button/ImageButton";
+import goBackImg from "../button/go_back.png";
+import goRightImg from "../button/go_right.png";
+import button5Img from "../button/button5.png";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useRoom } from "../../../contexts/RoomContext";
 
 export default function Room2() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, login, logout } = useAuth();
+  const { setCurrentRoom } = useRoom();
 
   useEffect(() => {
-    const loginStatus = authService.isLoggedIn();
-    const token = authService.getToken();
-    const userEmail = authService.getUserEmail();
-    
-    console.log('로그인 상태 확인:', {
-      isLoggedIn: loginStatus,
-      hasToken: !!token,
-      userEmail: userEmail
-    });
-    
-    setIsLoggedIn(loginStatus);
-  }, []);
+    setCurrentRoom(2);
+  }, [setCurrentRoom]);
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (userInfo) => {
     console.log('로그인 성공 콜백 호출');
-    const loginStatus = authService.isLoggedIn();
-    console.log('로그인 성공 후 상태:', loginStatus);
-    setIsLoggedIn(true);
+    login(userInfo);
   };
 
   const handleLogout = () => {
-    authService.logout();
-    setIsLoggedIn(false);
+    logout();
+  };
+
+  const handleGoToRoom1 = () => {
+    setCurrentRoom(1);
+  };
+
+  const handleGoToRoom3 = () => {
+    setCurrentRoom(3);
+  };
+
+  const handleGoToRoom5 = () => {
+    setCurrentRoom(5);
   };
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <img src={room1} alt="Room 1" style={{ width: '100%', display: 'block' }} />
+    <div style={{ position: 'relative', width: '1000px', height: '800px', margin: '0 auto' }}>
+      <img src={room2} alt="Room 2" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
         <div style={{ position: 'absolute', top: '10px', right: '10px', width: '35%', height: '35%' }}>
           <Map />
@@ -47,32 +52,26 @@ export default function Room2() {
           </div>
         )}
         
-        {!isLoggedIn && (
-          <Login onLoginSuccess={handleLoginSuccess} />
+        {isLoggedIn && (
+          <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
+            <ImageButton src={goRightImg} alt="옆으로" onClick={handleGoToRoom3} />
+          </div>
         )}
         
         {isLoggedIn && (
-          <div style={{ 
-            position: 'absolute', 
-            top: '10px', 
-            left: '10px', 
-            zIndex: 1000 
-          }}>
-            <button
-              onClick={handleLogout}
-              style={{
-                padding: '5px 10px',
-                backgroundColor: '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '12px'
-              }}
-            >
-              로그아웃
-            </button>
+          <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)' }}>
+            <ImageButton src={goBackImg} alt="뒤돌기" onClick={handleGoToRoom1} />
           </div>
+        )}
+        
+        {isLoggedIn && (
+          <div style={{ position: 'absolute', bottom: '20px', left: '20px' }}>
+            <ImageButton src={button5Img} alt="5번방으로" onClick={handleGoToRoom5} />
+          </div>
+        )}
+        
+        {!isLoggedIn && (
+          <Login onLoginSuccess={handleLoginSuccess} />
         )}
       </div>
     </div>

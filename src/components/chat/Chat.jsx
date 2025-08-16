@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import ChatInput from './ChatInput';
 import useWebSocket from '../../hooks/useWebSocket';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function Chat() {
+  const { logout } = useAuth();
   const [roomId, setRoomId] = useState(null);
   const [token, setToken] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
@@ -69,13 +71,29 @@ export default function Chat() {
         alignItems: 'center'
       }}>
         <span>채팅</span>
-        <span style={{
-          fontSize: '10px',
-          color: connected ? '#28a745' : '#dc3545',
-          fontWeight: 'normal'
-        }}>
-          {connected ? '연결됨' : '연결안됨'}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{
+            fontSize: '10px',
+            color: connected ? '#28a745' : '#dc3545',
+            fontWeight: 'normal'
+          }}>
+            {connected ? '연결됨' : '연결안됨'}
+          </span>
+          <button
+            onClick={logout}
+            style={{
+              padding: '2px 6px',
+              backgroundColor: '#dc3545',
+              color: 'white',
+              border: 'none',
+              borderRadius: '3px',
+              cursor: 'pointer',
+              fontSize: '10px'
+            }}
+          >
+            로그아웃
+          </button>
+        </div>
       </div>
       
       <div style={{

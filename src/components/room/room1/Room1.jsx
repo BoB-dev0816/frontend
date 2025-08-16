@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
 import room1 from "./room1.png";
+import button4Img from "../button/button4.png";
 import Chat from "../../chat/Chat";
 import Map from "../../map/Map";
 import Login from "../login";
+import ImageButton from "../button/ImageButton";
+import goBackImg from "../button/go_back.png";
+import goRightImg from "../button/go_right.png";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useRoom } from "../../../contexts/RoomContext";
 
@@ -23,9 +27,21 @@ export default function Room1() {
     logout();
   };
 
+  const handleGoToRoom2 = () => {
+    setCurrentRoom(2);
+  };
+
+  const handleGoToRoom3 = () => {
+    setCurrentRoom(3);
+  };
+
+  const handleGoToRoom4 = () => {
+    setCurrentRoom(4);
+  };
+
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <img src={room1} alt="Room 1" style={{ width: '100%', display: 'block' }} />
+    <div style={{ position: 'relative', width: '1000px', height: '800px', margin: '0 auto' }}>
+      <img src={room1} alt="Room 1" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
       <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
         <div style={{ position: 'absolute', top: '10px', right: '10px', width: '35%', height: '35%' }}>
           <Map />
@@ -36,32 +52,26 @@ export default function Room1() {
           </div>
         )}
         
-        {!isLoggedIn && (
-          <Login onLoginSuccess={handleLoginSuccess} />
+        {isLoggedIn && (
+          <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
+            <ImageButton src={goRightImg} alt="옆으로" onClick={handleGoToRoom3} />
+          </div>
         )}
         
         {isLoggedIn && (
-          <div style={{ 
-            position: 'absolute', 
-            top: '10px', 
-            left: '10px', 
-            zIndex: 1000 
-          }}>
-            <button
-              onClick={handleLogout}
-              style={{
-                padding: '5px 10px',
-                backgroundColor: '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '12px'
-              }}
-            >
-              로그아웃
-            </button>
+          <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)' }}>
+            <ImageButton src={goBackImg} alt="뒤돌기" onClick={handleGoToRoom2} />
           </div>
+        )}
+        
+        {isLoggedIn && (
+          <div style={{ position: 'absolute', bottom: '20px', left: '20px' }}>
+            <ImageButton src={button4Img} alt="4번방으로" onClick={handleGoToRoom4} />
+          </div>
+        )}
+        
+        {!isLoggedIn && (
+          <Login onLoginSuccess={handleLoginSuccess} />
         )}
       </div>
     </div>
