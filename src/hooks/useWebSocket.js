@@ -10,7 +10,7 @@ const useWebSocket = (roomId, token) => {
   useEffect(() => {
     if (!roomId || !token) return;
 
-    const socket = new SockJS('http://localhost:8080/connect');
+    const socket = new SockJS(`${process.env.REACT_APP_API_URL || 'http://localhost:8080'}/connect`);
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {

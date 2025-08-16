@@ -60,16 +60,33 @@ const CTFModal = ({ isOpen, onClose, onSuccess, question = "1+1은?", answer = "
         </div>
         
         <div style={{
+          marginBottom: '15px',
+          padding: '10px',
+          textAlign: 'center',
+          color: '#00ff00',
+          fontSize: '14px',
+          fontStyle: 'italic'
+        }}>
+          문제를 풀고 문을 열어보자
+        </div>
+
+        <div style={{
           marginBottom: '20px',
           padding: '15px',
           backgroundColor: '#0a0a0a',
           border: '1px solid #333',
           borderRadius: '4px'
         }}>
-          <div style={{ marginBottom: '10px', color: '#ffff00' }}>
+          <div style={{ marginBottom: '15px', color: '#ffff00', fontSize: '16px' }}>
             Question:
           </div>
-          <div style={{ fontSize: '18px' }}>
+          <div style={{ 
+            fontSize: '16px',
+            lineHeight: '1.6',
+            fontFamily: 'Consolas, Monaco, "Courier New", monospace',
+            whiteSpace: 'pre-line',
+            textAlign: 'left'
+          }}>
             {question}
           </div>
         </div>

@@ -102,8 +102,13 @@ export default function Room7() {
           isOpen={showCTFModal}
           onClose={handleCTFClose}
           onSuccess={handleCTFSuccess}
-          question="10진수 16을 2진수로 변환하면?"
-          answer="10000"
+          question={`로그인 폼에서 사용자의 입력값에 대한 검증이 제대로 이루어지지 않을 때, 데이터베이스의 모든 사용자 정보를 탈취하기 위해 공격자가 아이디 입력창에 admin' OR 1=1 -- 와 같은 구문을 입력하는 공격 기법은 무엇일까요?
+
+A. 크로스 사이트 요청 위조 (CSRF)
+B. SQL 인젝션 (SQL Injection)
+C. 버퍼 오버플로우 (Buffer Overflow)
+D. 파일 인클루전 (File Inclusion)`}
+          answer="B"
         />
       </div>
     </div>

@@ -102,8 +102,13 @@ export default function Room8() {
           isOpen={showCTFModal}
           onClose={handleCTFClose}
           onSuccess={handleCTFSuccess}
-          question="Base64로 인코딩된 'aGVsbG8='를 디코딩하면?"
-          answer="hello"
+          question={`공격자가 악의적인 스크립트를 웹 사이트의 게시판에 글 형태로 저장시켜 놓고, 해당 글을 열람하는 다른 사용자들의 웹 브라우저에서 그 스크립트가 실행되도록 하여 쿠키 정보 등을 탈취하는 공격 기법은 무엇일까요?
+
+A. 반사형 XSS (Reflected XSS)
+B. 저장형 XSS (Stored XSS)
+C. DOM 기반 XSS (DOM Based XSS)
+D. SQL 인젝션 (SQL Injection)`}
+          answer="B"
         />
       </div>
     </div>

@@ -118,8 +118,13 @@ export default function Room1() {
           isOpen={showCTFModal}
           onClose={handleCTFClose}
           onSuccess={handleCTFSuccess}
-          question="1+1은?"
-          answer="2"
+          question={`문자열을 복사하기 위해 strcpy() 함수를 사용할 때 발생할 수 있는 가장 대표적인 보안 취약점은 무엇인가요?
+
+A. SQL 인젝션
+B. 크로스 사이트 스크립팅 (XSS)
+C. 널 종료 문자(Null termination) 문제
+D. 버퍼 오버플로우 (Buffer Overflow)`}
+          answer="D"
         />
       </div>
     </div>
