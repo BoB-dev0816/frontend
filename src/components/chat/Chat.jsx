@@ -113,27 +113,22 @@ export default function Chat() {
         ) : (
           messages.map((msg, index) => (
             <div key={index} style={{
-              marginBottom: '6px',
-              padding: '6px',
+              marginBottom: '4px',
+              padding: '4px',
               backgroundColor: 'rgba(240, 240, 240, 0.7)',
               borderRadius: '4px',
-              fontSize: '12px'
+              fontSize: '12px',
+              textAlign: 'left'
             }}>
-              <div style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between',
-                marginBottom: '2px'
-              }}>
-                <span style={{ fontWeight: 'bold', color: '#007bff' }}>
-                  {msg.senderEmail ? msg.senderEmail.split('@')[0] : 'Unknown'}
-                </span>
-                <span style={{ fontSize: '10px', color: '#666' }}>
-                  {new Date().toLocaleTimeString()}
-                </span>
-              </div>
-              <div style={{ color: '#333' }}>
-                {msg.message}
-              </div>
+              <span style={{ fontWeight: 'bold', color: '#007bff' }}>
+                {msg.senderEmail ? msg.senderEmail.split('@')[0] : 'Unknown'}
+              </span>
+              <span style={{ fontSize: '10px', color: '#666' }}>
+                ({new Date().toLocaleTimeString()})
+              </span>
+              <span style={{ color: '#333' }}>
+                : {msg.message}
+              </span>
             </div>
           ))
         )}
