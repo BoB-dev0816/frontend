@@ -1,20 +1,29 @@
 import React, { useEffect } from "react";
 import room7 from "./room7.png";
+import button8Img from "../button/button8.png";
 import Chat from "../../chat/Chat";
 import Map from "../../map/Map";
 import Login from "../login";
 import ImageButton from "../button/ImageButton";
 import goBackImg from "../button/go_back.png";
+import DialogueBox from "../../dialogue/DialogueBox";
+import CTFModal from "../../ctf/CTFModal";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useRoom } from "../../../contexts/RoomContext";
 
 export default function Room7() {
   const { isLoggedIn, login, logout } = useAuth();
   const { setCurrentRoom } = useRoom();
+  const [showDialogue, setShowDialogue] = React.useState(false);
+  const [showCTFModal, setShowCTFModal] = React.useState(false);
+  const [hasCompletedCTF, setHasCompletedCTF] = React.useState(false);
 
   useEffect(() => {
     setCurrentRoom(7);
-  }, [setCurrentRoom]);
+    if (isLoggedIn) {
+      setShowDialogue(true);
+    }
+  }, [setCurrentRoom, isLoggedIn]);
 
   const handleLoginSuccess = (userInfo) => {
     console.log('로그인 성공 콜백 호출');
@@ -27,6 +36,28 @@ export default function Room7() {
 
   const handleGoToRoom4 = () => {
     setCurrentRoom(4);
+  };
+
+  const handleGoToRoom8 = () => {
+    if (!hasCompletedCTF) {
+      setShowCTFModal(true);
+    } else {
+      setCurrentRoom(8);
+    }
+  };
+
+  const handleCloseDialogue = () => {
+    setShowDialogue(false);
+  };
+
+  const handleCTFSuccess = () => {
+    setHasCompletedCTF(true);
+    setShowCTFModal(false);
+    setCurrentRoom(8);
+  };
+
+  const handleCTFClose = () => {
+    setShowCTFModal(false);
   };
 
   return (
@@ -48,9 +79,32 @@ export default function Room7() {
           </div>
         )}
         
+        {isLoggedIn && (
+          <div style={{ position: 'absolute', bottom: '100px', left: '50%', transform: 'translateX(-50%)' }}>
+            <ImageButton src={button8Img} alt="8번방으로" onClick={handleGoToRoom8} />
+          </div>
+        )}
+        
         {!isLoggedIn && (
           <Login onLoginSuccess={handleLoginSuccess} />
         )}
+
+        {showDialogue && (
+          <DialogueBox 
+            text="에어컨은 꺼져있고 방이 너무 덥다. 8번 방에 들어가보자" 
+            onClose={handleCloseDialogue}
+            autoClose={true}
+            autoCloseDelay={4000}
+          />
+        )}
+
+        <CTFModal
+          isOpen={showCTFModal}
+          onClose={handleCTFClose}
+          onSuccess={handleCTFSuccess}
+          question="10진수 16을 2진수로 변환하면?"
+          answer="10000"
+        />
       </div>
     </div>
   );

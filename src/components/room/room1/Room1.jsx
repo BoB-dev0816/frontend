@@ -7,16 +7,29 @@ import Login from "../login";
 import ImageButton from "../button/ImageButton";
 import goBackImg from "../button/go_back.png";
 import goRightImg from "../button/go_right.png";
+import DialogueBox from "../../dialogue/DialogueBox";
+import CTFModal from "../../ctf/CTFModal";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useRoom } from "../../../contexts/RoomContext";
 
 export default function Room1() {
   const { isLoggedIn, login, logout } = useAuth();
   const { setCurrentRoom } = useRoom();
+  const [showDialogue, setShowDialogue] = React.useState(false);
+  const [hasShownDialogue, setHasShownDialogue] = React.useState(false);
+  const [showCTFModal, setShowCTFModal] = React.useState(false);
+  const [hasCompletedCTF, setHasCompletedCTF] = React.useState(false);
 
   useEffect(() => {
     setCurrentRoom(1);
   }, [setCurrentRoom]);
+
+  useEffect(() => {
+    if (isLoggedIn && !hasShownDialogue) {
+      setShowDialogue(true);
+      setHasShownDialogue(true);
+    }
+  }, [isLoggedIn, hasShownDialogue]);
 
   const handleLoginSuccess = (userInfo) => {
     console.log('로그인 성공 콜백 호출');
@@ -36,7 +49,25 @@ export default function Room1() {
   };
 
   const handleGoToRoom4 = () => {
+    if (!hasCompletedCTF) {
+      setShowCTFModal(true);
+    } else {
+      setCurrentRoom(4);
+    }
+  };
+
+  const handleCloseDialogue = () => {
+    setShowDialogue(false);
+  };
+
+  const handleCTFSuccess = () => {
+    setHasCompletedCTF(true);
+    setShowCTFModal(false);
     setCurrentRoom(4);
+  };
+
+  const handleCTFClose = () => {
+    setShowCTFModal(false);
   };
 
   return (
@@ -73,6 +104,23 @@ export default function Room1() {
         {!isLoggedIn && (
           <Login onLoginSuccess={handleLoginSuccess} />
         )}
+
+        {showDialogue && (
+          <DialogueBox 
+            text="날씨가 너무 덥다, 그리고 센터 출입증을 두고왔다 어떻게 해야하지??" 
+            onClose={handleCloseDialogue}
+            autoClose={true}
+            autoCloseDelay={5000}
+          />
+        )}
+
+        <CTFModal
+          isOpen={showCTFModal}
+          onClose={handleCTFClose}
+          onSuccess={handleCTFSuccess}
+          question="1+1은?"
+          answer="2"
+        />
       </div>
     </div>
   );

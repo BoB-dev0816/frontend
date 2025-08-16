@@ -5,16 +5,21 @@ import Map from "../../map/Map";
 import Login from "../login";
 import ImageButton from "../button/ImageButton";
 import goBackImg from "../button/go_back.png";
+import DialogueBox from "../../dialogue/DialogueBox";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useRoom } from "../../../contexts/RoomContext";
 
 export default function Room9() {
   const { isLoggedIn, login, logout } = useAuth();
   const { setCurrentRoom } = useRoom();
+  const [showDialogue, setShowDialogue] = React.useState(false);
 
   useEffect(() => {
     setCurrentRoom(9);
-  }, [setCurrentRoom]);
+    if (isLoggedIn) {
+      setShowDialogue(true);
+    }
+  }, [setCurrentRoom, isLoggedIn]);
 
   const handleLoginSuccess = (userInfo) => {
     console.log('로그인 성공 콜백 호출');
@@ -27,6 +32,10 @@ export default function Room9() {
 
   const handleGoToRoom4 = () => {
     setCurrentRoom(4);
+  };
+
+  const handleCloseDialogue = () => {
+    setShowDialogue(false);
   };
 
   return (
@@ -50,6 +59,15 @@ export default function Room9() {
         
         {!isLoggedIn && (
           <Login onLoginSuccess={handleLoginSuccess} />
+        )}
+
+        {showDialogue && (
+          <DialogueBox 
+            text="강의실에 에어컨이 켜져있고 몇몇 학생들이 공부를 하고 있다!" 
+            onClose={handleCloseDialogue}
+            autoClose={true}
+            autoCloseDelay={4000}
+          />
         )}
       </div>
     </div>
