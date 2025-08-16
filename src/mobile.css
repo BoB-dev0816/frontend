@@ -1,0 +1,46 @@
+@media (max-width: 768px) {
+  /* 메인 방 컨테이너 - 1000px x 800px를 화면 전체로 */
+  div[style*="width: 1000px"] {
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+  }
+  
+  /* 방 배경 이미지 - contain으로 변경해서 이미지가 잘리지 않게 */
+  img[style*="objectFit: cover"] {
+    object-fit: contain !important;
+  }
+  
+  /* 채팅창 크기 조절 */
+  div[style*="width: 300px"][style*="height: 200px"] {
+    width: 280px !important;
+    height: 160px !important;
+    font-size: 11px !important;
+  }
+  
+  /* 맵 크기 조절 */
+  div[style*="width: 35%"][style*="height: 35%"] {
+    width: 25% !important;
+    height: 20% !important;
+  }
+  
+  /* 버튼 이미지 크기 조절 */
+  button img {
+    width: 45px !important;
+    height: 45px !important;
+  }
+  
+  /* 대사창 크기 조절 */
+  div[style*="width: 80%"][style*="maxWidth: 600px"] {
+    width: 90% !important;
+    font-size: 14px !important;
+    padding: 15px !important;
+  }
+  
+  /* CTF 모달 크기 조절 */
+  div[style*="maxWidth: 500px"] {
+    width: 95% !important;
+    max-width: none !important;
+    font-size: 14px !important;
+  }
+}

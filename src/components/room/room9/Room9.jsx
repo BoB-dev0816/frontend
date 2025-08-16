@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import room9 from "./room9.png";
+import airImg from "./air.png";
 import Chat from "../../chat/Chat";
 import Map from "../../map/Map";
 import Login from "../login";
 import ImageButton from "../button/ImageButton";
 import goBackImg from "../button/go_back.png";
 import DialogueBox from "../../dialogue/DialogueBox";
+import AirConditioner from "../../aircon/AirConditioner";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useRoom } from "../../../contexts/RoomContext";
 
@@ -60,6 +62,8 @@ export default function Room9() {
         {!isLoggedIn && (
           <Login onLoginSuccess={handleLoginSuccess} />
         )}
+
+        <AirConditioner />
 
         {showDialogue && (
           <DialogueBox 

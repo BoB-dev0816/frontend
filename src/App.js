@@ -1,4 +1,5 @@
 import React from 'react';
+import './mobile.css';
 import Room1 from './components/room/room1/Room1';
 import Room2 from './components/room/room2/Room2';
 import Room3 from './components/room/room3/Room3';
